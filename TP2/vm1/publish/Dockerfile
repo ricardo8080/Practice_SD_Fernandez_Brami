@@ -14,5 +14,5 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 7777
+EXPOSE 1883
 ENTRYPOINT [ "node", "index.js" ]

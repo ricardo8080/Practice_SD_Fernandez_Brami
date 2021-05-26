@@ -1,7 +1,7 @@
 {
-  "name": "vm1_mqtt",
+  "name": "publish",
   "version": "1.0.0",
-  "description": "MQTT Practice",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

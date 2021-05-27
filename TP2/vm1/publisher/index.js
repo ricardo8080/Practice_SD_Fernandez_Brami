@@ -1,21 +1,21 @@
-var mqtt = require('mqtt')
-//var client  = mqtt.connect('mqtt://test.mosquitto.org')
-var client  = mqtt.connect('mqtt://brokertp2:1883')
-//var client  = mqtt.connect('mqtt://'+process.env.IP + ':'+process.env.LISTEN)
-
+var mqtt = require('mqtt');
+var client  = mqtt.connect('mqtt://brokertp2:1883');
+var ip = require("ip");
+var getId = require('docker-container-id');
+var id = await getId();
 
 function intervalFunc() {
-    console.log('Cant stop me now!');
-    client.publish('presence', getData())
+    console.log('Sending data :)');
+    client.publish(process.env.TOPIC, getData());
+    //client.publish('precense', getDate());
 }
 
 function getData() {
     var time = new Date();
-    var cont = 
     var data = {
 	time: date,
-	container: "69696969",
-	ip: "69.69.69.69"
+	container: id,
+	ip: ip
     }
 }
 

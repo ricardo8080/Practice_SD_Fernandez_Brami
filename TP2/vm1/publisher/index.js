@@ -1,8 +1,8 @@
 var mqtt = require('mqtt');
 var client  = mqtt.connect('mqtt://brokertp2:1883');
 var ip = require("ip");
-var getId = require('docker-container-id');
-var id = await getId();
+var os = require("os");
+var id = os.hostname();
 
 function intervalFunc() {
     console.log('Sending data :)');

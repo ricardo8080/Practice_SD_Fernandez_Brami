@@ -1,26 +1,34 @@
-var mqtt = require('mqtt');
-var client  = mqtt.connect('mqtt://brokertp2:1883');
-var ip = require("ip");
-var os = require("os");
-var id = os.hostname();
+const mqtt = require('mqtt');
+const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME +':'+ process.env.PORT);
+const ip = require("ip");
+const os = require("os");
+const id = os.hostname();
 
 function intervalFunc() {
-    console.log('Sending data');
     client.publish(process.env.TOPIC, getData());
-}
+};
 
 function getData() {
-    var time = new Date();
-    var data = {
-	time: time,
-	container: id,
-	ip: ip.address()
+    const time = new Date();
+    var months = ["January", "February", "March", "April", "May", 
+    "June", "July", "August", "September", "October", "November", "December"];
+    var days = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+    const dateFormated = days[time.getDay()]+ " " +
+                        months[time.getMonth()] + " "  
+                        time.getDate() + " "  +
+                        time.getHours + ":" +
+                        time.getMinutes + ":" +
+                        time.getSeconds +
+                        " -04 " + time.getFullYear();
+    const data = {
+        time: dateFormated,
+        container: id,
+        ip: ip.address()
     }
-    var text = JSON.stringify(data)
-    return text;
-}
+    return JSON.stringify(data);
+};
+
 
 client.on('connect', function () {
-//    client.publish('presence', 'Hello mqtt')
     setInterval(intervalFunc, 5000);
-})
+});

@@ -5,18 +5,19 @@ var os = require("os");
 var id = os.hostname();
 
 function intervalFunc() {
-    console.log('Sending data :)');
+    console.log('Sending data');
     client.publish(process.env.TOPIC, getData());
-    //client.publish('precense', getDate());
 }
 
 function getData() {
     var time = new Date();
     var data = {
-	time: date,
+	time: time,
 	container: id,
-	ip: ip
+	ip: ip.address()
     }
+    var text = JSON.stringify(data)
+    return text;
 }
 
 client.on('connect', function () {

@@ -1,6 +1,6 @@
 var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://test.mosquitto.org')
-//var client  = mqtt.connect('mqtt://brokertp2')
+//var client  = mqtt.connect('mqtt://test.mosquitto.org')
+var client  = mqtt.connect('mqtt://brokertp2:1883')
 //var client  = mqtt.connect('mqtt://'+process.env.IP + ':'+process.env.LISTEN)
 
 

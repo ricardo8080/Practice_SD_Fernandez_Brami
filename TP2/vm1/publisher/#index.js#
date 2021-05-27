@@ -1,8 +1,9 @@
 const mqtt = require('mqtt');
+//const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME +':'+ process.env.PORT);
+//const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
+const client  = mqtt.connect('mqtt://brokertp2')
 const ip = require("ip");
 const os = require("os");
-const process = require('process');
-const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 const id = os.hostname();
 
 function intervalFunc() {

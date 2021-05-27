@@ -1,5 +1,6 @@
 const mqtt = require('mqtt');
-const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME +':'+ process.env.PORT);
+//const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME +':'+ process.env.PORT);
+const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const ip = require("ip");
 const os = require("os");
 const id = os.hostname();

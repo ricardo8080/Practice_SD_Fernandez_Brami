@@ -6,7 +6,17 @@ var client  = mqtt.connect('mqtt://test.mosquitto.org')
 
 function intervalFunc() {
     console.log('Cant stop me now!');
-    client.publish('presence', 'Hello mqtt')
+    client.publish('presence', getData())
+}
+
+function getData() {
+    var time = new Date();
+    var cont = 
+    var data = {
+	time: date,
+	container: "69696969",
+	ip: "69.69.69.69"
+    }
 }
 
 client.on('connect', function () {

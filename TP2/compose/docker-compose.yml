@@ -1,0 +1,6 @@
+version: "3.0"
+services:
+  eclipse-mosquitto:
+    build: ./eclipse-mosquitto
+    ports:
+      - 11182:1883

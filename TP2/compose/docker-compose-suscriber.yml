@@ -1,0 +1,11 @@
+version: "3.0"
+services:
+  sub:
+    build: ./subscriber #image: subscriber
+    environment:
+      - TOPIC=general
+      - BROKERNAME=broker
+      - PORT=11182
+    deploy:
+      replicas: 5
+      

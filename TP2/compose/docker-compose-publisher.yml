@@ -1,0 +1,22 @@
+version: "3.0"
+services:
+  broker:
+    image: eclipse-mosquitto 
+    ports:
+      - 11182:1883
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  pub:
+    build: ./publisher #image: publisher
+    environment:
+      - TOPIC=general
+      - BROKERNAME=broker
+      - PORT=1883:1883
+    deploy:
+      replicas: 5
+    depends_on: 
+      -broker
+  networks: 
+    default:
+      external: 
+        name: fernan-prude

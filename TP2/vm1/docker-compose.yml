@@ -7,10 +7,12 @@ services:
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
   pub:
-    image: publisher
+    build: ./publisher
     environment:
       - TOPIC=general
       - BROKERNAME=research.upb.edu
       - PORT=11182
     deploy:
       replicas: 5
+    depends_on:
+      - broker

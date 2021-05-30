@@ -17,9 +17,9 @@ function getData() {
     const dateFormated = days[time.getDay()]+ " " +
                         months[time.getMonth()] + " "  +
                         time.getDate() + " "  +
-                        time.getHours + ":" +
-                        time.getMinutes + ":" +
-                        time.getSeconds +
+                        time.getHours() + ":" +
+                        time.getMinutes() + ":" +
+                        time.getSeconds() +
                         " -04 " + time.getFullYear();
     const data = {
         time: dateFormated,

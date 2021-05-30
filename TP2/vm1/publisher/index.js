@@ -15,7 +15,7 @@ function getData() {
     "June", "July", "August", "September", "October", "November", "December"];
     var days = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
     const dateFormated = days[time.getDay()]+ " " +
-                        months[time.getMonth()] + " "  
+                        months[time.getMonth()] + " "  +
                         time.getDate() + " "  +
                         time.getHours + ":" +
                         time.getMinutes + ":" +

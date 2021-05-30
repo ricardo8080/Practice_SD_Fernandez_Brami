@@ -1,0 +1,16 @@
+version: "3.0"
+services:
+  broker:
+    image: eclipse-mosquitto
+    ports:
+      - 11182:1883
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  pub:
+    image: publisher
+    environment:
+      - TOPIC=general
+      - BROKERNAME=research.upb.edu
+      - PORT=11182
+    deploy:
+      replicas: 5

@@ -1,3 +1,4 @@
+
 version: "3.0"
 services:
   broker:
@@ -11,7 +12,8 @@ services:
       placement:
         constraints: [node.role == manager]
   pub:
-    image: publisher
+    image: localhost:5000/publisher
+    build: ./publisher
     environment:
       - TOPIC=general
       - BROKERNAME=research.upb.edu
@@ -23,7 +25,8 @@ services:
     depends_on:
       - broker
   sub:
-    image: subscriber
+    image: localhost:5000/subscriber
+    build: ./subscriber
     environment:
       - TOPIC=general
       - HOST=research.upb.edu

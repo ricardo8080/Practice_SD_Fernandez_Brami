@@ -6,14 +6,29 @@ services:
       - 1883:1883
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
   pub:
     image: publisher
-    build: ./publisher
     environment:
       - TOPIC=general
       - BROKERNAME=research.upb.edu
       - PORT=11182
     deploy:
       replicas: 5
+      placement:
+        constraints: [node.role == manager]
     depends_on:
       - broker
+  sub:
+    image: subscriber
+    environment:
+      - TOPIC=general
+      - HOST=research.upb.edu
+      - PORT=11182
+    deploy:
+      replicas: 5
+      placement:
+        constraints: [node.role == worker]

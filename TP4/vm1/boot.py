@@ -30,17 +30,6 @@ last_recieved = 0
 
 led = Pin(25, Pin.OUT)
 
-station = network.WLAN(network.STA_IF)
-
-station.active(True)
-station.connect(ssid, password)
-
-while station.isconnected() == False:
-  pass
-
-print('Connection successful')
-print(station.ifconfig())
-
 i2c_rst = Pin(16, Pin.OUT)
 i2c_rst.value(0)
 time.sleep_ms(5)
@@ -51,3 +40,24 @@ i2c = SoftI2C(scl=i2c_scl, sda=i2c_sda)
 oled_width = 128
 oled_height = 64
 oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
+
+station = network.WLAN(network.STA_IF)
+station.active(True)
+i = 0
+for net in station.scan():
+  if i == 7:
+    oled.show()
+    time.sleep(3)
+    i = 0
+    oled.fill(0)
+  print(net[0])
+  oled.text(net[0], 0, i * 14)
+  i = i + 1
+time.sleep(3)
+station.connect(ssid, password)
+
+while station.isconnected() == False:
+  pass
+
+print('Connection successful')
+print(station.ifconfig())

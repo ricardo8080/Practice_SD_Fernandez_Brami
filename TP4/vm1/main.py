@@ -35,7 +35,7 @@ while True:
     if (time.time() - last_recieved) > 1:
       led.value(False)
       #oled.fill(0)
-      #oled.show()
+      oled.show()
 #    if (time.time() - last_message) > message_interval:
 #      msg = b'Hello #%d' % counter
 #      client.publish(topic_pub, msg)

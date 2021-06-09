@@ -12,7 +12,7 @@ gc.collect()
 from machine import Pin
 from time import sleep
 
-from machine import Pin, I2C
+from machine import Pin, SoftI2C
 import ssd1306
 
 ssid = '5G Tigo COVID-19'
@@ -41,9 +41,13 @@ while station.isconnected() == False:
 print('Connection successful')
 print(station.ifconfig())
 
-i2c = I2C(scl=Pin(22), sda=Pin(21))
+i2c_rst = Pin(16, Pin.OUT)
+i2c_rst.value(0)
+time.sleep_ms(5)
+i2c_rst.value(1)
+i2c_scl = Pin(15, Pin.OUT, Pin.PULL_UP)
+i2c_sda = Pin(4, Pin.OUT, Pin.PULL_UP)
+i2c = SoftI2C(scl=i2c_scl, sda=i2c_sda)
 oled_width = 128
 oled_height = 64
-print(':(:')
 oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
-print(':(')

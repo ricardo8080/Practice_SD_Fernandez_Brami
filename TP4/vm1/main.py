@@ -26,15 +26,16 @@ while True:
   try:
     message = client.check_msg()
     if message is not None:
-      print('LED ON')
       last_recieved = time.time()
       led.value(True)
-      print(':)')
-      oled.text('socialismo', 0, 0)
-      [print('>:v')]
+      oled.fill(0)
+      for i in range(len(message) / 14):
+        oled.text(message[14 * i:14 * (i + 1)], 0, 9 * i)
       oled.show()
     if (time.time() - last_recieved) > 1:
       led.value(False)
+      #oled.fill(0)
+      #oled.show()
 #    if (time.time() - last_message) > message_interval:
 #      msg = b'Hello #%d' % counter
 #      client.publish(topic_pub, msg)

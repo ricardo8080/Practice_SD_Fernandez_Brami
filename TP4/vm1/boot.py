@@ -47,17 +47,20 @@ i = 0
 for net in station.scan():
   if i == 7:
     oled.show()
-    time.sleep(3)
+    time.sleep(1)
     i = 0
     oled.fill(0)
-  print(net[0])
   oled.text(net[0], 0, i * 14)
   i = i + 1
-time.sleep(3)
+time.sleep(1)
 station.connect(ssid, password)
 
 while station.isconnected() == False:
   pass
 
 print('Connection successful')
+oled.fill(0)
+oled.text('Connection', 0, 0)
+oled.text('successful', 0, 14)
+oled.show()
 print(station.ifconfig())

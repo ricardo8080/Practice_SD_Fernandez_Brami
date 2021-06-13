@@ -8,18 +8,13 @@ const id = os.hostname();
 
 /////////
 
-const mongoose = require('mongoose');
-const URL = ('mongodb://mongo:27017');
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb://mongo:27017/mydb";
 
-mongoose.connect(URL, function(err, db) {
-  if (err) throw err;
-  console.log("Database created!");
-  var dbo = db.db("mydb");
-  dbo.createCollection("workers", function(err, res) {
-    if (err) throw err;
-    console.log("Collection created!");
-    db.close();
-  });
+const mongoclient = new MongoClient(uri, { useNewUrlParser: true });
+mongoclient.connect((err) => {
+    console.log('mongo connected');
+    mongoclient.close();
 });
 
 ///////
@@ -58,7 +53,15 @@ client.on('message', function (topic, message) {
     //newItem.save();
 })
 
+function intervalFunc() {
+    mongoclient.connect((err) => {
+        console.log('mongo connected');
+        mongoclient.close();
+    });
+    console.log('hola');
+};
 
+setInterval(intervalFunc, 5000);
 
 
 //Initialization

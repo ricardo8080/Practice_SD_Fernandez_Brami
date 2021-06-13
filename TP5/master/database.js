@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const URI = ('mongodb://mongo:27017');
+const URI = ('mongodb://mongo:27017/work_to_do');
 
 mongoose.connect( URI,{ 
     useNewUrlParser: true 

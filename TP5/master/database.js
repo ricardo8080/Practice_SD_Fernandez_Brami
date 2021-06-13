@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-//const URI = ('mongodb://mongo:27017');
-const URL = ('mongodb://mongo:27017');
-/*
-mongoose.connect( URI, {
+const URI = ('mongodb://mongo:27017/work_to_do');
+
+mongoose.connect( URI,{ 
     useNewUrlParser: true 
   }).then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
-*/
+/*
 mongoose.connect(URL, function(err, db) {
   if (err) throw err;
   console.log("Database created!");
@@ -17,5 +16,5 @@ mongoose.connect(URL, function(err, db) {
     db.close();
   });
 });
-
+*/
 module.exports = mongoose;

@@ -2,36 +2,16 @@ const mqtt = require('mqtt');
 const ip = require("ip");
 const os = require("os");
 const process = require('process');
-//const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
-const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
+//const marter_register  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
+const marter_register  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
 
-function intervalFunc() {
-    client.publish(process.env.TOPIC, getData());
-    console.log("aaa")
+function intervalFunc(worker_id) {
+    marter_register.publish(process.env.TOPICMASTERREGISTER, 'container_id');
+    //marter_register.publish(process.env.TOPICMASTERREGISTER, worker_id);
+    console.log("aacontainer_id sent")
 };
 
-function getData() {
-    const time = new Date();
-    var months = ["January", "February", "March", "April", "May", 
-    "June", "July", "August", "September", "October", "November", "December"];
-    var days = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
-    const dateFormated = days[time.getDay()]+ " " +
-                        months[time.getMonth()] + " "  +
-                        time.getDate() + " "  +
-                        time.getHours() + ":" +
-                        time.getMinutes() + ":" +
-                        time.getSeconds() +
-                        " -04 " + time.getFullYear();
-    const data = {
-        time: dateFormated,
-        container: id,
-        ip: ip.address()
-    }
-    return JSON.stringify(data);
-};
-
-
-client.on('connect', function () {
-    setInterval(intervalFunc, 5000);
+marter_register.on('connect', function () {
+    setInterval(intervalFunc, 10000);
 });

@@ -8,7 +8,7 @@ const id = os.hostname();
 
 function intervalFunc() {
     worker_register.publish(process.env.TOPICMASTERREGISTER, getData());
-    console.log("aaa")
+    console.log(getData())
 };
 
 function getData() {
@@ -18,5 +18,5 @@ function getData() {
 
 
 worker_register.on('connect', function () {
-    setInterval(intervalFunc, 10000);
+    setInterval(intervalFunc, 20000);
 });

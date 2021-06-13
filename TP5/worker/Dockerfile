@@ -9,7 +9,6 @@ COPY package*.json ./
 
 RUN npm install
 
-CMD ["./startMaster.sh"]
 # If you are building your code for production
 # RUN npm ci --only=production
 

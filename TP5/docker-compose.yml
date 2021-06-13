@@ -1,0 +1,46 @@
+version: "3.0"
+services:
+  broker:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - broker
+  master:
+    env_file: 
+      - nab.env
+    image: master
+    build: ./master
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - broker
+      - mongo
+  worker:
+    env_file: 
+      - nab.env
+    image: worker
+    build: ./worker
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - master

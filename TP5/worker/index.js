@@ -7,7 +7,7 @@ const worker_register  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
 
 function intervalFunc() {
-    worker_register.publish(process.env.TOPIC, getData());
+    worker_register.publish(process.env.TOPICMASTERREGISTER, getData());
     console.log("aaa")
 };
 
@@ -18,5 +18,5 @@ function getData() {
 
 
 worker_register.on('connect', function () {
-    setInterval(intervalFunc, 5000);
+    setInterval(intervalFunc, 10000);
 });

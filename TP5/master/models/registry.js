@@ -5,4 +5,4 @@ const WorkerSchema = new Schema({
   worker_id: { type: String,  required: true }
 });
 
-module.exports = mongoose.model('registy_worker', WorkerSchema);
+module.exports = mongoose.model('registry_worker', WorkerSchema);

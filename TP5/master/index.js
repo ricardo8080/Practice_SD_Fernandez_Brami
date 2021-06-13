@@ -20,15 +20,15 @@ client.on('connect', function() {
     })
 })
 
-client.on('message', function (topic, message) {
+client.on('message', async function (topic, message) {
     // message is Buffer
         console.log(topic + "test");    
     if(topic == process.env.TOPICMASTERREGISTER) {
-        console.log(message.toString());    
+        console.log(JSON.parse(message));    
         const newItem = new Item({
             worker_id: (JSON.parse(message)).worker_id
         });
-        newItem.save();
+        await newItem.save();
     }
   })
 

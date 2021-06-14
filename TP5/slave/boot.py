@@ -23,13 +23,8 @@ password = '*RF250570notta'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 
-last_message = 0
-message_interval = 5
-counter = 0
-last_recieved = 0
 
 led = Pin(25, Pin.OUT)
-
 i2c_rst = Pin(16, Pin.OUT)
 i2c_rst.value(0)
 time.sleep_ms(5)

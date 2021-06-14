@@ -81,6 +81,9 @@ client.on('connect', function() {
 
 
 client.on('message', async function (topic, message) {
+
+    console.log("received a message: " +  message + " : "  + topic);
+
     // message is Buffer
     switch(topic) {
         case process.env.TOPICMASTERREGISTER:

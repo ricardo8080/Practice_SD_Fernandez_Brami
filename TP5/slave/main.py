@@ -17,7 +17,7 @@ try:
 except OSError as e:
   restart_and_reconnect()
 
-client_master.publish(TOPICMASTERREQUEST, ujson.dumps(request))
+client_master.publish(TOPICMASTERREQUEST, ujson.dumps(master_request))
 
 while True:
   try:
@@ -25,25 +25,28 @@ while True:
     print(message_master)
 
     if message_master is not None:
-      msg_json = ujson.loads(message_master)
-      print(msg_json)
-      destination = msg_json.destination
+      master_json = ujson.loads(message_master)
+      print(master_json)
+      destination = master_json.destination
       print(destination)
       if destination == SENSORID:
-        WORKERID = msg_json.worker
+        WORKERID = master_json.worker
         print(WORKERID)
-      if worker != '':
-        restart_and_reconnect()
-      client_worker = connect_and_subscribe(TOPICWORKERIDRESPONSE)
-      client_worker.publish(TOPICWORKERIDREQUEST, b'{sensor_id: ', SENSORID, '}')
-
-      message_worker = client_worker.check_msg()
-      while message_worker is None:
+        if worker == '':
+          restart_and_reconnect()
+        client_worker = connect_and_subscribe(TOPICWORKERIDRESPONSE)
+        client_worker.publish(TOPICWORKERIDREQUEST, ujson.dumps(worker_request))
         message_worker = client_worker.check_msg()
-      
-      #led.value(True)
-      WORKERID = ''
-
-
+        while message_worker is None:
+          message_worker = client_worker.check_msg()
+        worker_json = ujson.loads(message_worker)
+        print(master_json)
+        freq = worker_json.freq
+        print(freq)
+        iteration = worker_json.iteration
+        print(iteration)
+        #doing task I guess
+        client_master.publish(TOPICMASTERREQUEST, ujson.dumps(master_request))
+        WORKERID = ''
   except OSError as e:
     restart_and_reconnect()

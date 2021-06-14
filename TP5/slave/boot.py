@@ -51,16 +51,19 @@ print(station.ifconfig())
 print('la ip es: ', station.ifconfig()[0][-2:-1])
 
 ip = station.ifconfig()[0][-2:0]
-timestamp = time.gmtime(0)
+sub_ips = ip.split('.')
 
-
-SENSORID = 
+SENSORID = sub_ips[len(sub_ips) - 1] + '.' + sub_ips[len(sub_ips) - 2] + '.' + str(time.gmtime(0))
 
 WORKERID = ''
 
-request = {
+master_request = {
   sensor_id: SENSORID,
   worker: WORKERID
+}
+
+worker_request = {
+  sensor_id: SENSORID
 }
 
 SERVER='192.168.100.58'

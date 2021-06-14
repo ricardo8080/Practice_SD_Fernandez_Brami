@@ -2,21 +2,39 @@ const mqtt = require('mqtt');
 const ip = require("ip");
 const os = require("os");
 const process = require('process');
-//const worker_register  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
-const worker_register  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
+const sleep = require('system-sleep');
+//const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
+const client = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
+const TOPICWORKERREQUEST = 'upb/' + id + '/request'
+const TOPICWORKERRESPONSE = 'upb/' + id + '/response'
 
-function intervalFunc() {
-    worker_register.publish(process.env.TOPICMASTERREGISTER, getData());
-    console.log("aaa")
-};
-
-function getData() {
+function getId() {
     const data = { worker_id: id }
     return JSON.stringify(data);
 };
 
+function getResponse() {
+    const data = {
+        freq: (Math.random() + 0.5),
+        iteration: (Math.floor(Math.random() * 15) + 5) 
+    }
+    return JSON.stringify(data);
+};
 
-worker_register.on('connect', function () {
-    setInterval(intervalFunc, 10000);
+client.on('connect', function () {
+    sleep(5000);
+    client.publish(process.env.TOPICMASTERREGISTER, getId());
+    client.subscribe(TOPICWORKERREQUEST, function (err) {
+        if (!err) {
+            console.log('connected');
+        }
+    })
 });
+
+client.on('message', async function (topic, message) {
+    // message is Buffer
+    if(topic == TOPICWORKERREQUEST) {
+        client.publish(TOPICWORKERRESPONSE, getResponse());
+    }
+})

@@ -12,8 +12,12 @@ services:
       placement:
         constraints: [node.role == manager]
   pub:
+<<<<<<< HEAD
+    image: publisher
+=======
     image: localhost:5000/publisher
     build: ./publisher
+>>>>>>> 0f7b9ab95101f46623b7ec379e8fe502586bdb9f
     environment:
       - TOPIC=general
       - BROKERNAME=research.upb.edu
@@ -25,8 +29,12 @@ services:
     depends_on:
       - broker
   sub:
+<<<<<<< HEAD
+    image: subscriber
+=======
     image: localhost:5000/subscriber
     build: ./subscriber
+>>>>>>> 0f7b9ab95101f46623b7ec379e8fe502586bdb9f
     environment:
       - TOPIC=general
       - HOST=research.upb.edu

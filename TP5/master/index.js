@@ -5,7 +5,7 @@ const process = require('process');
 //const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
-const express = require('express');
+const express = require('express');git 
 const app = express()
 const mongoose = require('mongoose');
 
@@ -26,24 +26,34 @@ server.listen(8080);
 client.on('connect', function() {
     client.subscribe(process.env.TOPICMASTERREGISTER, function (err) {
         if (!err) {
-            console.log('connected');
+            console.log('connected to ' + process.env.TOPICMASTERREGISTER);
         }
     })
 })
 
 client.on('message', async function (topic, message) {
     // message is Buffer
-<<<<<<< HEAD
-    console.log(topic + " test");    
-=======
->>>>>>> dd3ac5185e276c8c0ab6b47ff216696b2c83ae4e
-    if(topic == process.env.TOPICMASTERREGISTER) {
-        const newItem = new Item({
-            worker_id: (JSON.parse(message)).worker_id
-        });
-        await newItem.save();
-        console.log(JSON.parse(message));    
+    switch(topic) {
+        case process.env.TOPICMASTERREGISTER:
+            const newItem = new Item({
+                worker_id: (JSON.parse(message)).worker_id
+            });
+            await newItem.save();
+            console.log(JSON.parse(message));
+        break;
+        case process.env.TOPICMASTERREQUEST:
+            const Workers = await Item.find();
+            if ( Workers === null || 
+                Workers === undefined  )
+            {
+               res.json([""]);
+            } else {
+                console.log("it has something")
+            }
+        break;
+        case process.env.TOPICMASTERRESPONSE:
+        break;
+        default:
+            console.log("wrong topic");
     }
-  })
-
-
+})

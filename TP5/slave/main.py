@@ -1,15 +1,10 @@
-def sub_cb(topic, msg):
-  print((topic, msg))
-  if topic == b'notification' and msg == b'received':
-    print('ESP received hello message')
-
 def connect_and_subscribe():
-  global client_id, mqtt_server, mqtt_port, topic_sub
-  client = MQTTClient(client_id, mqtt_server, mqtt_port)
-  client.set_callback(sub_cb)
+  global client_id, SERVER, PORT, TOPICMASTERRESPONSE
+  client = MQTTClient(client_id, SERVER, PORT)
+  client.set_callback(TOPICMASTERRESPONSE)
   client.connect()
-  client.subscribe(topic_sub)
-  print('Connected to %s MQTT broker, subscribed to %s topic' % (mqtt_server, topic_sub))
+  client.subscribe(TOPICMASTERRESPONSE)
+  print('Connected to %s MQTT broker, subscribed to %s topic' % (SERVER, TOPICMASTERRESPONSE))
   return client
 
 def restart_and_reconnect():
@@ -21,6 +16,8 @@ try:
   client = connect_and_subscribe()
 except OSError as e:
   restart_and_reconnect()
+
+client.publish(TOPICMASTERREQUEST, b'{sensor_id: %d, worker: ""}' % client_id)
 
 while True:
   try:

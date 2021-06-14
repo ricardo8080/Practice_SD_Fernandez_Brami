@@ -27,7 +27,7 @@ function getResponseData() {
 };
 
 client.on('connect', function () {
-    sleep(5000);
+    sleep(10000);
     //Send worker_id to master
     client.publish(process.env.TOPICMASTERREGISTER, getId());
     //subscribe for esp32 requests

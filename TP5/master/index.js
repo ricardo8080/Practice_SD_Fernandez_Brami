@@ -2,6 +2,7 @@ const mqtt = require('mqtt');
 const ip = require("ip");
 const os = require("os");
 const process = require('process');
+const sleep = require('system-sleep');
 const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 //const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
@@ -65,6 +66,7 @@ async function getEsp32RequestAndAnswer(message) {
 
 
 client.on('connect', function() {
+    sleep(5000);
     client.subscribe(process.env.TOPICMASTERREGISTER, function (err) {
         if (!err) {
             console.log('connected to ' + process.env.TOPICMASTERREGISTER);

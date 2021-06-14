@@ -1,10 +1,10 @@
-def connect_and_subscribe():
-  global client_id, SERVER, PORT, TOPICMASTERRESPONSE
+def connect_and_subscribe(TOPIC):
+  global client_id, SERVER, PORT
   client = MQTTClient(client_id, SERVER, PORT)
-  client.set_callback(TOPICMASTERRESPONSE)
+  client.set_callback(TOPIC)
   client.connect()
-  client.subscribe(TOPICMASTERRESPONSE)
-  print('Connected to %s MQTT broker, subscribed to %s topic' % (SERVER, TOPICMASTERRESPONSE))
+  client.subscribe(TOPIC)
+  print('Connected to %s , subscribed to %s' % (SERVER, TOPIC))
   return client
 
 def restart_and_reconnect():
@@ -13,25 +13,30 @@ def restart_and_reconnect():
   machine.reset()
 
 try:
-  client = connect_and_subscribe()
+  client_master = connect_and_subscribe(TOPICMASTERRESPONSE)
 except OSError as e:
   restart_and_reconnect()
 
-client.publish(TOPICMASTERREQUEST, b'{sensor_id: %d, worker: ""}' % client_id)
+client_master.publish(TOPICMASTERREQUEST, b'{sensor_id: ', sensor_id, ' worker: ""}')
 
 while True:
   try:
-    message = client.check_msg()
+    message = client_master.check_msg()
+    print(message)
+
     if message is not None:
-      last_recieved = time.time()
-      led.value(True)
-      oled.fill(0)
-      for i in range(len(message) / 14):
-        oled.text(message[14 * i:14 * (i + 1)], 0, 9 * i)
-      oled.show()
-    if (time.time() - last_recieved) > 1:
-      led.value(False)
-      #oled.fill(0)
-      oled.show()
+      msg_json = ujson.loads(message)
+      print(msg_json)
+      destination = msg_json.destination
+      print(destination)
+      WORKERID = msg_json.worker
+      print(WORKERID)
+
+      client_worker = connect_and_subscribe(TOPICWORKERIDRESPONSE)
+      client_worker.publish(TOPICWORKERIDREQUEST, b'pasame la tarea pvto')
+
+      #led.value(True)
+
+
   except OSError as e:
     restart_and_reconnect()

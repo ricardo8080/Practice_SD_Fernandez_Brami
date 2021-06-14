@@ -42,16 +42,25 @@ client.on('message', async function (topic, message) {
             console.log(JSON.parse(message));
         break;
         case process.env.TOPICMASTERREQUEST:
-            const Workers = await Item.find();
-            if ( Workers === null || 
-                Workers === undefined  )
-            {
-               res.json([""]);
+            const destination = (JSON.parse(message)).sensor_id;
+            const worker = (JSON.parse(message)).worker
+            if (worker == '') {
+                const Workers = await Item.findOne();
+                if ( Workers === null || 
+                    Workers === undefined  )
+                {
+
+                } else {
+                    client.publish(process.env.TOPICMASTERRESPONSE, getId());
+                }
             } else {
-                console.log("it has something")
+                const newItem = new Item({
+                    worker_id: worker
+                });
+                await newItem.save();
+                console.log(JSON.parse(message));
             }
-        break;
-        case process.env.TOPICMASTERRESPONSE:
+            
         break;
         default:
             console.log("wrong topic");

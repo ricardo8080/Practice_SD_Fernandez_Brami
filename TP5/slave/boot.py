@@ -14,18 +14,12 @@ from time import sleep
 
 import ssd1306
 
+import ujson
+
 ssid = '5G Tigo COVID-19'
 password = 'As96HBUn'
 
 client_id = ubinascii.hexlify(machine.unique_id())
-
-SERVER='research.upb.edu'
-PORT='11132'
-TIMEOUT=5
-TOPICMASTERREQUEST='upb/master/request'
-TOPICMASTERRESPONSE='upb/master/response'
-TOPICWORKERIDREQUEST='upb/%d/request' % client_id
-TOPICWORKERIDRESPONSE='upb/%d/response' % client_id
 
 last_message = 0
 message_interval = 5
@@ -54,3 +48,18 @@ while station.isconnected() == False:
 
 print('Connection successful')
 print(station.ifconfig())
+print('la ip es: ', station.ifconfig()[0][-2:-1])
+
+IP = station.ifconfig()[0][-2:0]
+
+sensor_id = IP
+
+WORKERID = ''
+
+SERVER='192.168.100.58'
+PORT='1883'
+TIMEOUT=5
+TOPICMASTERREQUEST='upb/master/request'
+TOPICMASTERRESPONSE='upb/master/response'
+TOPICWORKERIDREQUEST='upb/', WORKERID, '/request'
+TOPICWORKERIDRESPONSE='upb/', WORKERID, '/response'

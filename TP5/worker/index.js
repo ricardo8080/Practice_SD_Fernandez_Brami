@@ -2,6 +2,7 @@ const mqtt = require('mqtt');
 const ip = require("ip");
 const os = require("os");
 const process = require('process');
+const sleep = require('system-sleep');
 //const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 const client = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
@@ -21,9 +22,9 @@ function getResponse() {
     return JSON.stringify(data);
 };
 
-client.publish(process.env.TOPICMASTERREGISTER, getId());
-
 client.on('connect', function () {
+    sleep(5000);
+    client.publish(process.env.TOPICMASTERREGISTER, getId());
     client.subscribe(TOPICWORKERREQUEST, function (err) {
         if (!err) {
             console.log('connected');

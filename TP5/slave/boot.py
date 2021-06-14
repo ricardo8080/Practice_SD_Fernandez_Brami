@@ -50,11 +50,18 @@ print('Connection successful')
 print(station.ifconfig())
 print('la ip es: ', station.ifconfig()[0][-2:-1])
 
-IP = station.ifconfig()[0][-2:0]
+ip = station.ifconfig()[0][-2:0]
+timestamp = time.gmtime(0)
 
-sensor_id = IP
+
+SENSORID = 
 
 WORKERID = ''
+
+request = {
+  sensor_id: SENSORID,
+  worker: WORKERID
+}
 
 SERVER='192.168.100.58'
 PORT='1883'

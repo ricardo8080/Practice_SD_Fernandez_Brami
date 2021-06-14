@@ -24,6 +24,8 @@ services:
       - nab.env
     image: master
     build: ./master
+    command: sh -c './wait-for research.upb.edu:1883 -t 10 -- echo "The Broker is up!"'
+    command: sh -c './wait-for research.upb.edu:27017 -t 10 -- node index.js'
     deploy:
       replicas: 1
       placement:
@@ -36,8 +38,6 @@ services:
       - nab.env
     image: worker
     build: ./worker
-    command: sh -c './wait-for research.upb.edu:1883 -t 5 -- echo "The Broker is up!"'
-    command: sh -c './wait-for research.upb.edu:27017 -t 5 -- node index.js'
     deploy:
       replicas: 1
       placement:

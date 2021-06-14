@@ -43,16 +43,17 @@ client.on('message', async function (topic, message) {
         break;
         case process.env.TOPICMASTERREQUEST:
             const destination = (JSON.parse(message)).sensor_id;
-            const worker = (JSON.parse(message)).worker
+            let worker = (JSON.parse(message)).worker
             if (worker == '') {
-                const Workers = await Item.findOne();
-                if ( Workers === null || 
-                    Workers === undefined  )
-                {
-
-                } else {
-                    client.publish(process.env.TOPICMASTERRESPONSE, getId());
+                const Workers = await Item.findOneAndDelete();
+                if (!(Workers === null ||  Workers === undefined)) {
+                    worker = Workers.worker_id
                 }
+                const response = {
+                    destination: destination,
+                    worker: worker
+                }
+                client.publish(process.env.TOPICMASTERRESPONSE, JSON.stringify(response));
             } else {
                 const newItem = new Item({
                     worker_id: worker
@@ -60,7 +61,6 @@ client.on('message', async function (topic, message) {
                 await newItem.save();
                 console.log(JSON.parse(message));
             }
-            
         break;
         default:
             console.log("wrong topic");

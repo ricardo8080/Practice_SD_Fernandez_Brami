@@ -17,25 +17,32 @@ try:
 except OSError as e:
   restart_and_reconnect()
 
-client_master.publish(TOPICMASTERREQUEST, b'{sensor_id: ', sensor_id, ' worker: ""}')
+client_master.publish(TOPICMASTERREQUEST, ujson.dumps(request))
 
 while True:
   try:
-    message = client_master.check_msg()
-    print(message)
+    message_master = client_master.check_msg()
+    print(message_master)
 
-    if message is not None:
-      msg_json = ujson.loads(message)
+    if message_master is not None:
+      msg_json = ujson.loads(message_master)
       print(msg_json)
       destination = msg_json.destination
       print(destination)
-      WORKERID = msg_json.worker
-      print(WORKERID)
-
+      if destination == SENSORID:
+        WORKERID = msg_json.worker
+        print(WORKERID)
+      if worker != '':
+        restart_and_reconnect()
       client_worker = connect_and_subscribe(TOPICWORKERIDRESPONSE)
-      client_worker.publish(TOPICWORKERIDREQUEST, b'pasame la tarea pvto')
+      client_worker.publish(TOPICWORKERIDREQUEST, b'{sensor_id: ', SENSORID, '}')
 
+      message_worker = client_worker.check_msg()
+      while message_worker is None:
+        message_worker = client_worker.check_msg()
+      
       #led.value(True)
+      WORKERID = ''
 
 
   except OSError as e:

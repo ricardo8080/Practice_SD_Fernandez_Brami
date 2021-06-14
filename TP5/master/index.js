@@ -5,16 +5,15 @@ const process = require('process');
 //const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
-const express = require('express');git 
+const express = require('express');
 const app = express()
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
 require('./database');
-
 const Item = require('./models/registry');
 
-
+//Create Mini Server http
 const http = require("http");
 const requestListener = function (req, res) {
     res.writeHead('ok');
@@ -23,46 +22,73 @@ const requestListener = function (req, res) {
 const server = http.createServer(requestListener);
 server.listen(8080);
 
+async function getAndSaveWorkerToRegister(message){
+    if (!(message === null ||  message === undefined)) {
+        const newItem = new Item({
+            worker_id: (JSON.parse(message)).worker_id
+        });
+        await newItem.save().then(() => console.log("worker_id saved successfully"));
+    } else {
+        console.log("No workerid was sent")
+    }
+}
+
+async function getEsp32RequestAndAnswer(message) {
+    const destination = (JSON.parse(message)).sensor_id;
+    const worker = (JSON.parse(message)).worker;
+    console.log(process.env.TOPICMASTERREQUEST);
+    console.log("a " + worker + " a");
+    //save the workerid again
+    if (worker != "") {
+        const newItem = new Item({
+            worker_id: worker
+        });
+        await newItem.save().then(() => console.log("worker_id saved successfully"));
+    }
+    //Search workerid to send response
+    const Workers = await Item.findOneAndDelete();
+    console.log("Workers");
+    console.log(Workers);
+    const response = {
+        destination: "",
+        worker: ""
+    };
+    if (!(Workers === null || Workers === undefined)) {
+        response.destination = destination;
+        response.worker = Workers.worker_id;
+    }
+    console.log("response");
+    console.log(response);
+    return JSON.stringify(response);
+}
+
+
+
 client.on('connect', function() {
     client.subscribe(process.env.TOPICMASTERREGISTER, function (err) {
         if (!err) {
             console.log('connected to ' + process.env.TOPICMASTERREGISTER);
         }
     })
+    client.subscribe(process.env.TOPICMASTERREQUEST, function (err) {
+        if (!err) {
+            console.log('connected to ' + process.env.TOPICMASTERREQUEST);
+        }
+    })
 })
+
 
 client.on('message', async function (topic, message) {
     // message is Buffer
     switch(topic) {
         case process.env.TOPICMASTERREGISTER:
-            const newItem = new Item({
-                worker_id: (JSON.parse(message)).worker_id
-            });
-            await newItem.save();
-            console.log(JSON.parse(message));
+            await getAndSaveWorkerToRegister(message);
         break;
         case process.env.TOPICMASTERREQUEST:
-            const destination = (JSON.parse(message)).sensor_id;
-            let worker = (JSON.parse(message)).worker
-            if (worker == '') {
-                const Workers = await Item.findOneAndDelete();
-                if (!(Workers === null ||  Workers === undefined)) {
-                    worker = Workers.worker_id
-                }
-                const response = {
-                    destination: destination,
-                    worker: worker
-                }
-                client.publish(process.env.TOPICMASTERRESPONSE, JSON.stringify(response));
-            } else {
-                const newItem = new Item({
-                    worker_id: worker
-                });
-                await newItem.save();
-                console.log(JSON.parse(message));
-            }
-        break;
+            client.publish(process.env.TOPICMASTERRESPONSE, await getEsp32RequestAndAnswer(message));
+            break;
         default:
             console.log("wrong topic");
     }
 })
+

@@ -1,8 +1,8 @@
 import time
 from umqttsimple import MQTTClient
+from ntptime import settime
 import ubinascii
 import machine
-import micropython
 import network
 import esp
 esp.osdebug(None)
@@ -16,18 +16,15 @@ import ssd1306
 
 import ujson
 
-ssid = '5G Tigo COVID-19'
-password = 'As96HBUn'
+#ssid = '5G Tigo COVID-19'
+#password = 'As96HBUn'
+ssid = 'EnGenius7F67B2'
+password = '*RF250570notta'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 
-last_message = 0
-message_interval = 5
-counter = 0
-last_recieved = 0
 
 led = Pin(25, Pin.OUT)
-
 i2c_rst = Pin(16, Pin.OUT)
 i2c_rst.value(0)
 time.sleep_ms(5)
@@ -47,29 +44,31 @@ while station.isconnected() == False:
   pass
 
 print('Connection successful')
-print(station.ifconfig())
-print('la ip es: ', station.ifconfig()[0][-2:-1])
+#print(station.ifconfig())
+print('la ip es: ', station.ifconfig()[0])
 
-ip = station.ifconfig()[0][-2:0]
+ip = station.ifconfig()[0]
 sub_ips = ip.split('.')
 
-SENSORID = sub_ips[len(sub_ips) - 1] + '.' + sub_ips[len(sub_ips) - 2] + '.' + str(time.gmtime(0))
+timestamp=str((946684800 + time.time()))
+sensorid = sub_ips[len(sub_ips) - 2] + '.' + sub_ips[len(sub_ips) - 1] + '.' +  timestamp[-5:]
+print(sensorid + ' :SENSORID')
 
-WORKERID = ''
+message_interval = 2
+last_recieved = 0
 
+workerid = b''
 master_request = {
-  sensor_id: SENSORID,
-  worker: WORKERID
+  "sensor_id": sensorid,
+  "worker": workerid
 }
 
 worker_request = {
-  sensor_id: SENSORID
+  "sensor_id": sensorid
 }
 
-SERVER='192.168.100.58'
-PORT='1883'
+SERVER='research.upb.edu'
+PORT='11132'
 TIMEOUT=5
-TOPICMASTERREQUEST='upb/master/request'
-TOPICMASTERRESPONSE='upb/master/response'
-TOPICWORKERIDREQUEST='upb/', WORKERID, '/request'
-TOPICWORKERIDRESPONSE='upb/', WORKERID, '/response'
+topicmasterrequest=b'upb/master/request'
+topicmasterresponse=b'upb/master/response'

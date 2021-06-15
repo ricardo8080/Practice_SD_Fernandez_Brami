@@ -14,8 +14,8 @@
     "docker-container-id": "^1.0.1",
     "express": "^4.16.3",
     "ip": "^1.1.5",
-    "mongodb": "^3.6.9",
     "mongoose": "^5.2.7",
-    "mqtt": "^4.2.6"
+    "mqtt": "^4.2.6",
+    "system-sleep": "^1.2"
   }
 }

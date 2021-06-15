@@ -48,7 +48,6 @@ async function getEsp32RequestAndAnswer(message) {
     }
     //Search workerid to send response
     const Workers = await Item.findOneAndDelete();
-    const WorkersR = await Item.find();
     console.log("Workers");
     console.log(Workers);
     const response = {
@@ -82,9 +81,7 @@ client.on('connect', function() {
 
 
 client.on('message', async function (topic, message) {
-
-    console.log("received a message: " +  message + " : "  + topic);
-
+    console.log("received a message: " console.log("received a message: " + messag+ message , " : " , topic);
     // message is Buffer
     switch(topic) {
         case process.env.TOPICMASTERREGISTER:

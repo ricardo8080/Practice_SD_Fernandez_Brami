@@ -23,8 +23,8 @@ password = 'As96HBUn'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 
-
 led = Pin(25, Pin.OUT)
+
 i2c_rst = Pin(16, Pin.OUT)
 i2c_rst.value(0)
 time.sleep_ms(5)

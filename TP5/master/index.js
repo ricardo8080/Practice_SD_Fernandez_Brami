@@ -41,9 +41,11 @@ async function getEsp32RequestAndAnswer(message) {
     console.log("a " + worker + " a");
     //save the workerid again
     if (worker != "") {
+        console.log('de verdad entro aqui ' + worker)
         const newItem = new Item({
             worker_id: worker
         });
+        newItem.worker_id = worker;
         await newItem.save().then(() => console.log("worker_id saved successfully"));
     }
     //Search workerid to send response

@@ -50,10 +50,10 @@ while True:
         workerid = master_json["worker"]
         #if there was response with worker_id then contact with worker
         if workerid != '':
-          topicworkeridrequest=(b'upb/', workerid, b'/request')
-          topicsensoridresponse=(b'upb/', sensor_id, b'/response')
+          topicworkeridrequest=b'upb/' + workerid + b'/request'
+          topicsensoridresponse=b'upb/' + sensorid + b'/response'
           #subscrbe to worker and request work
-          client = connect_and_subscribe(topicsensoridresponse)
+          client = connect_and_subscribe(topicsensoridresponse, sub_cb_worker)
           print(ujson.dumps(worker_request))
           client.publish(topicworkeridrequest, ujson.dumps(worker_request))       
           #wait for answer of worker
@@ -63,9 +63,7 @@ while True:
           #when received save and do the task
           worker_json = ujson.loads(message_worker)
           print(worker_json)
-          freq = worker_json.freq
-          print(freq)
-          iteration = worker_json.iteration
-          print(iteration)
+          freq = worker_json["freq"]
+          iteration = worker_json["iteration"]
   except OSError as e:
     restart_and_reconnect()

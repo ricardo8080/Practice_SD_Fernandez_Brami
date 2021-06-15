@@ -1,10 +1,16 @@
-def connect_and_subscribe(TOPIC):
+def sub_cb(topic, msg):
+  print((topic, msg))
+  if topic == b'notification' and msg == b'received':
+    print('ESP received hello message')
+  return (topic, msg)
+
+def connect_and_subscribe(topic):
   global client_id, SERVER, PORT
   client = MQTTClient(client_id, SERVER, PORT)
-  client.set_callback(TOPIC)
+  client.set_callback(sub_cb)
   client.connect()
-  client.subscribe(TOPIC)
-  print('Connected to %s , subscribed to %s' % (SERVER, TOPIC))
+  client.subscribe(topic)
+  print('Connected to %s , subscribed to %s' % (SERVER, topic))
   return client
 
 def restart_and_reconnect():
@@ -13,7 +19,7 @@ def restart_and_reconnect():
   machine.reset()
 
 try:
-  client_master = connect_and_subscribe(topicmasterresponse)
+  client = connect_and_subscribe(topicmasterresponse)
 except OSError as e:
   restart_and_reconnect()
 
@@ -23,12 +29,19 @@ print(ujson.dumps(master_request))
 print('start')
 while True:
   try:
+    #send firsttime/again the request to master
+    if (time.time() - last_recieved) > message_interval:
+      client.publish(topicmasterrequest, ujson.dumps(master_request))
+      workerid = b''
+      last_recieved = time.time()
     #expect answer from master
-    message_master = client_master.check_msg()
+    message_master = client.check_msg()
     if message_master is not None:
       print(message_master)
+    if message_master is not None and message_master[0] == topicmasterresponse and message_master[1] is not None:
+      #print(message_master)
       #if received save the message
-      master_json = ujson.loads(message_master)
+      master_json = ujson.loads(message_master[1])
       print(master_json)
       destination = master_json.destination
       print(destination)
@@ -41,13 +54,13 @@ while True:
           topicworkeridrequest=(b'upb/', workerid, b'/request')
           topicworkeridresponse=(b'upb/', workerid, b'/response')
           #subscrbe to worker and request work
-          client_worker = connect_and_subscribe(topicworkeridresponse)
+          client = connect_and_subscribe(topicworkeridresponse)
           print(ujson.dumps(worker_request))
-          client_worker.publish(topicworkeridrequest, ujson.dumps(worker_request))       
+          client.publish(topicworkeridrequest, ujson.dumps(worker_request))       
           #wait for answer of worker
-          message_worker = client_worker.check_msg()
+          message_worker = client.check_msg()
           while message_worker is None:
-            message_worker = client_worker.check_msg()
+            message_worker = client.check_msg()
           #when received save and do the task
           worker_json = ujson.loads(message_worker)
           print(worker_json)
@@ -55,10 +68,5 @@ while True:
           print(freq)
           iteration = worker_json.iteration
           print(iteration)
-    #send firsttime/again the request to master
-    if (time.time() - last_recieved) > message_interval:
-      client_master.publish(topicmasterrequest, ujson.dumps(master_request))
-      workerid = b''
-      last_recieved = time.time()
   except OSError as e:
     restart_and_reconnect()

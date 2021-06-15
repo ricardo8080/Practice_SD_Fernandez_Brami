@@ -16,10 +16,10 @@ import ssd1306
 
 import ujson
 
-#ssid = '5G Tigo COVID-19'
-#password = 'As96HBUn'
-ssid = 'EnGenius7F67B2'
-password = '*RF250570notta'
+ssid = '5G Tigo COVID-19'
+password = 'As96HBUn'
+#ssid = 'EnGenius7F67B2'
+#password = '*RF250570notta'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 

@@ -48,11 +48,10 @@ async function getEsp32RequestAndAnswer(message) {
     }
     //Search workerid to send response
     const Workers = await Item.findOneAndDelete();
-    const WorkersR = await Item.find();
     console.log("Workers");
     console.log(Workers);
     const response = {
-        destination: "",
+        destination: destination,
         worker: ""
     };
     if (!(Workers === null || Workers === undefined)) {

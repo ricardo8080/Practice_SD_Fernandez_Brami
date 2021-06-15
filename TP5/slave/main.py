@@ -1,14 +1,9 @@
-def sub_cb_master(topic, msg):
-  if topic == topicmasterresponse:
+def sub_cb(topic, msg):
+  if topic == topicmasterresponse or topic == topicsensoridresponse:
     return msg
   return None
 
-def sub_cb_worker(topic, msg):
-  if topic == topicsensoridresponse:
-    return msg
-  return None
-
-def connect_and_subscribe(topic, sub_cb):
+def connect_and_subscribe(topic):
   global client_id, SERVER, PORT
   client = MQTTClient(client_id, SERVER, PORT)
   client.set_callback(sub_cb)
@@ -23,7 +18,7 @@ def restart_and_reconnect():
   machine.reset()
 
 try:
-  client = connect_and_subscribe(topicmasterresponse, sub_cb_master)
+  client = connect_and_subscribe(topicmasterresponse)
 except OSError as e:
   restart_and_reconnect()
 
@@ -37,6 +32,7 @@ while True:
     if (time.time() - last_recieved) > message_interval:
       client.publish(topicmasterrequest, ujson.dumps(master_request))
       workerid = b''
+      master_request["worker"] = b''
       last_recieved = time.time()
     #expect answer from master
     message_master = client.check_msg()
@@ -48,12 +44,13 @@ while True:
       #if it is for me then
       if destination == sensorid:
         workerid = master_json["worker"]
+        master_request["worker"] = workerid
         #if there was response with worker_id then contact with worker
         if workerid != '':
           topicworkeridrequest=b'upb/' + workerid + b'/request'
           topicsensoridresponse=b'upb/' + sensorid + b'/response'
           #subscrbe to worker and request work
-          client = connect_and_subscribe(topicsensoridresponse, sub_cb_worker)
+          client.subscribe(topicsensoridresponse)
           print(ujson.dumps(worker_request))
           client.publish(topicworkeridrequest, ujson.dumps(worker_request))       
           #wait for answer of worker
@@ -65,5 +62,6 @@ while True:
           print(worker_json)
           freq = worker_json["freq"]
           iteration = worker_json["iteration"]
+
   except OSError as e:
     restart_and_reconnect()

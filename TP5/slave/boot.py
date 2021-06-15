@@ -16,6 +16,8 @@ import ssd1306
 
 import ujson
 
+from ntptime import settime
+
 ssid = '5G Tigo COVID-19'
 password = 'As96HBUn'
 #ssid = 'EnGenius7F67B2'
@@ -46,6 +48,8 @@ while station.isconnected() == False:
 print('Connection successful')
 #print(station.ifconfig())
 print('la ip es: ', station.ifconfig()[0])
+
+settime()
 
 ip = station.ifconfig()[0]
 sub_ips = ip.split('.')

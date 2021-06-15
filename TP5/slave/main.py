@@ -18,8 +18,7 @@ except OSError as e:
   restart_and_reconnect()
 
 
-#Send solicitude to master for worker_id
-client_master.publish(topicmasterrequest, ujson.dumps(master_request))
+last_sent = time.time()
 print(ujson.dumps(master_request))
 print('start')
 while True:
@@ -44,7 +43,7 @@ while True:
           #subscrbe to worker and request work
           client_worker = connect_and_subscribe(topicworkeridresponse)
           print(ujson.dumps(worker_request))
-          client_worker.publish(topicworkeridrequest, ujson.dumps(worker_request))
+          client_worker.publish(topicworkeridrequest, ujson.dumps(worker_request))       
           #wait for answer of worker
           message_worker = client_worker.check_msg()
           while message_worker is None:
@@ -56,8 +55,10 @@ while True:
           print(freq)
           iteration = worker_json.iteration
           print(iteration)
-    #send again the request to master
-    client_master.publish(topicmasterrequest, ujson.dumps(master_request))
-    workerid = b''
+    #send firsttime/again the request to master
+    if (time.time() - last_recieved) > message_interval:
+      client_master.publish(topicmasterrequest, ujson.dumps(master_request))
+      workerid = b''
+      last_recieved = time.time()
   except OSError as e:
     restart_and_reconnect()

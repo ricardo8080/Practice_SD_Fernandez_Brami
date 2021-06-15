@@ -52,11 +52,12 @@ sub_ips = ip.split('.')
 
 timestamp=str((946684800 + time.time()))
 sensorid = sub_ips[len(sub_ips) - 2] + '.' + sub_ips[len(sub_ips) - 1] + '.' +  timestamp[-5:]
-
 print(sensorid + ' :SENSORID')
 
-workerid = b''
+message_interval = 2
+last_recieved = 0
 
+workerid = b''
 master_request = {
   "sensor_id": sensorid,
   "worker": workerid

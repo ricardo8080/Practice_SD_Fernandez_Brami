@@ -1,10 +1,14 @@
-def sub_cb(topic, msg):
-  print((topic, msg))
-  if topic == b'notification' and msg == b'received':
-    print('ESP received hello message')
-  return (topic, msg)
+def sub_cb_master(topic, msg):
+  if topic == topicmasterresponse:
+    return msg
+  return None
 
-def connect_and_subscribe(topic):
+def sub_cb_worker(topic, msg):
+  if topic == topicsensoridresponse:
+    return msg
+  return None
+
+def connect_and_subscribe(topic, sub_cb):
   global client_id, SERVER, PORT
   client = MQTTClient(client_id, SERVER, PORT)
   client.set_callback(sub_cb)
@@ -19,7 +23,7 @@ def restart_and_reconnect():
   machine.reset()
 
 try:
-  client = connect_and_subscribe(topicmasterresponse)
+  client = connect_and_subscribe(topicmasterresponse, sub_cb_master)
 except OSError as e:
   restart_and_reconnect()
 
@@ -37,24 +41,19 @@ while True:
     #expect answer from master
     message_master = client.check_msg()
     if message_master is not None:
-      print(message_master)
-    if message_master is not None and message_master[0] == topicmasterresponse and message_master[1] is not None:
       #print(message_master)
       #if received save the message
-      master_json = ujson.loads(message_master[1])
-      print(master_json)
-      destination = master_json.destination
-      print(destination)
+      master_json = ujson.loads(message_master)
+      destination = master_json["destination"]
       #if it is for me then
       if destination == sensorid:
-        workerid = master_json.worker
-        print(workerid)
+        workerid = master_json["worker"]
         #if there was response with worker_id then contact with worker
         if workerid != '':
           topicworkeridrequest=(b'upb/', workerid, b'/request')
-          topicworkeridresponse=(b'upb/', workerid, b'/response')
+          topicsensoridresponse=(b'upb/', sensor_id, b'/response')
           #subscrbe to worker and request work
-          client = connect_and_subscribe(topicworkeridresponse)
+          client = connect_and_subscribe(topicsensoridresponse)
           print(ujson.dumps(worker_request))
           client.publish(topicworkeridrequest, ujson.dumps(worker_request))       
           #wait for answer of worker

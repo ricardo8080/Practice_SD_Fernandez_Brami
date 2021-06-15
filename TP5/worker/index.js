@@ -7,7 +7,6 @@ const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env
 //const client = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
 const TOPICWORKERREQUEST = 'upb/' + id + '/request'
-const TOPICWORKERRESPONSE = 'upb/' + id + '/response'
 
 function getId() {
     const data = { worker_id: id }
@@ -40,7 +39,8 @@ client.on('connect', function () {
 
 client.on('message', async function (topic, message) {
     // message is Buffer
+    TOPICSENSORIDRESPONSE='upb/'+JSON.parse(message).sensor_id+'/response'
     if(topic == TOPICWORKERREQUEST) {
-        client.publish(TOPICWORKERRESPONSE, getResponseData());
+        client.publish(TOPICSENSORIDRESPONSE, getResponseData());
     }
 })

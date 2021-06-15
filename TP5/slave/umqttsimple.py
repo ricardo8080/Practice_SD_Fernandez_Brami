@@ -191,13 +191,14 @@ class MQTTClient:
             pid = pid[0] << 8 | pid[1]
             sz -= 2
         msg = self.sock.read(sz)
-        self.cb(topic, msg)
+        #self.cb(topic, msg)
         if op & 6 == 2:
             pkt = bytearray(b"\x40\x02\0\0")
             struct.pack_into("!H", pkt, 2, pid)
             self.sock.write(pkt)
         elif op & 6 == 4:
             assert 0
+        return self.cb(topic, msg)
 
     # Checks whether a pending message from server is available.
     # If not, returns immediately with None. Otherwise, does

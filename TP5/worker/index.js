@@ -4,7 +4,6 @@ const os = require("os");
 const process = require('process');
 const sleep = require('system-sleep');
 const client  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
-//const client = mqtt.connect('mqtt://'+ process.env.BROKERNAME);
 const id = os.hostname();
 const TOPICWORKERREQUEST = 'upb/' + id + '/request'
 
@@ -16,8 +15,9 @@ function getId() {
 };
 
 function getResponseData() {
+    const freq = parseFloat((Math.random() + 0.50).toFixed(2));
     const data = {
-        freq: (Math.random() + 0.5),
+        freq: freq,
         iteration: (Math.floor(Math.random() * 15) + 5) 
     }
     console.log("data");

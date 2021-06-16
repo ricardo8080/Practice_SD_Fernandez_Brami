@@ -37,7 +37,6 @@ while True:
     #expect answer from master
     message_master = client.check_msg()
     if message_master is not None and message_master[0] == topicmasterresponse:
-      #print(message_master)
       #if received save the message
       master_json = ujson.loads(message_master[1])
       destination = master_json["destination"]
@@ -59,7 +58,6 @@ while True:
             message_worker = client.check_msg()
           #when received save and do the task
           worker_json = ujson.loads(message_worker[1])
-          print(worker_json)
           freq = worker_json["freq"]
           iteration = worker_json["iteration"]
           oled.fill(0)

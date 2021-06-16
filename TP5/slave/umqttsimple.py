@@ -10,11 +10,10 @@ class MQTTException(Exception):
 
 class MQTTClient:
 
-    def __init__(self, client_id, server, port, user=None, password=None, keepalive=0,
+    def __init__(self, client_id, server, port=0, user=None, password=None, keepalive=0,
                  ssl=False, ssl_params={}):
-        #if port == 0:
-            #port = 11132 if ssl else 11132
-            #port = 8883 if ssl else 1883
+        if port == 0:
+            port = 8883 if ssl else 1883
         self.client_id = client_id
         self.sock = None
         self.server = server
@@ -192,14 +191,14 @@ class MQTTClient:
             pid = pid[0] << 8 | pid[1]
             sz -= 2
         msg = self.sock.read(sz)
-        self.cb(topic, msg)
+        #self.cb(topic, msg)
         if op & 6 == 2:
             pkt = bytearray(b"\x40\x02\0\0")
             struct.pack_into("!H", pkt, 2, pid)
             self.sock.write(pkt)
         elif op & 6 == 4:
             assert 0
-        return msg
+        return self.cb(topic, msg)
 
     # Checks whether a pending message from server is available.
     # If not, returns immediately with None. Otherwise, does

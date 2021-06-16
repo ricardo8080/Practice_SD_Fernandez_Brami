@@ -16,15 +16,17 @@ import ssd1306
 
 import ujson
 
-#ssid = '5G Tigo COVID-19'
-#password = 'As96HBUn'
-ssid = 'EnGenius7F67B2'
-password = '*RF250570notta'
+from ntptime import settime
+
+ssid = '5G Tigo COVID-19'
+password = 'As96HBUn'
+#ssid = 'EnGenius7F67B2'
+#password = '*RF250570notta'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 
-
 led = Pin(25, Pin.OUT)
+
 i2c_rst = Pin(16, Pin.OUT)
 i2c_rst.value(0)
 time.sleep_ms(5)
@@ -47,6 +49,8 @@ print('Connection successful')
 #print(station.ifconfig())
 print('la ip es: ', station.ifconfig()[0])
 
+settime()
+
 ip = station.ifconfig()[0]
 sub_ips = ip.split('.')
 
@@ -54,7 +58,7 @@ timestamp=str((946684800 + time.time()))
 sensorid = sub_ips[len(sub_ips) - 2] + '.' + sub_ips[len(sub_ips) - 1] + '.' +  timestamp[-5:]
 print(sensorid + ' :SENSORID')
 
-message_interval = 2
+message_interval = 5
 last_recieved = 0
 
 workerid = b''

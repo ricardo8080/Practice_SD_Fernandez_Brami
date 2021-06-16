@@ -58,6 +58,7 @@ while True:
             message_worker = client.check_msg()
           #when received save and do the task
           worker_json = ujson.loads(message_worker[1])
+          print(worker_json)
           freq = worker_json["freq"]
           iteration = worker_json["iteration"]
           oled.fill(0)

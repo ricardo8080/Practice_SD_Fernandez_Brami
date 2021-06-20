@@ -6,7 +6,7 @@ package helloworld;
 service Greeter {
   // Sends a greeting
   rpc Register (Request) returns (Response) {}
-  rpc SendTask (SendTask) returns (Empty) {}
+  rpc SendTask (SendTaskR) returns (Empty) {}
 }
 
 // The request message containing the user's name.
@@ -18,7 +18,7 @@ message Response {
     string message = 1;
 }
 
-message SendTask {
+message SendTaskR {
   string message = 1;
 }
 

@@ -83,7 +83,7 @@ async function makeSendTask(message) {
     }
 }
 
-function register(call, callback) {
+async function register(call, callback) {
     await getAndSaveWorkerToRegister(call);
     const freq = parseFloat((Math.random() + 0.50).toFixed(2));
     const data = {
@@ -110,10 +110,10 @@ client_mqtt.on('message', async function (topic, message) {
     }
 })
 
-var server_mqtt = new grpc.Server();
-server_mqtt.addService(hello_proto.Greeter.service, {register: register});
-server_mqtt.bindAsync(id + ':9090', grpc.ServerCredentials.createInsecure(), () => {
-    server_mqtt.start();
+var server_grpc = new grpc.Server();
+server_grpc.addService(hello_proto.Greeter.service, {register: register});
+server_grpc.bindAsync(id + ':9090', grpc.ServerCredentials.createInsecure(), () => {
+    server_grpc.start();
 });
 
 //server.addService(hello_proto.Greeter.service, {sendTask: sendTask});

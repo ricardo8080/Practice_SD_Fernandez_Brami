@@ -37,6 +37,7 @@ function sendTask(call, callback) {
   callback(null, {sensor_id: 'sensor_id'});
 }
 
+
 client_mqtt.on('connect', function () {
   sleep(8000);
   //Send worker_id to master

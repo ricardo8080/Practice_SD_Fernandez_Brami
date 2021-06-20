@@ -6,7 +6,7 @@ const sleep = require('system-sleep');
 const client_mqtt  = mqtt.connect('mqtt://'+ process.env.BROKERNAME+ ':'+ process.env.PORT );
 const id = os.hostname();
 
-const PROTO_PATH = '../helloworld.proto';
+const PROTO_PATH = './helloworld.proto';
 
 const parseArgs = require('minimist');
 const grpc = require('@grpc/grpc-js');

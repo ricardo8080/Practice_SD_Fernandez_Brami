@@ -14,7 +14,7 @@ require('./database');
 const Item = require('./models/registry');
 
 // Create gRPC server
-const PROTO_PATH = '../helloworld.proto';
+const PROTO_PATH = './helloworld.proto';
 const parseArgs = require('minimist');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');

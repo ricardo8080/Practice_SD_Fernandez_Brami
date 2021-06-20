@@ -2,7 +2,7 @@
 # Source: helloworld.proto for package 'helloworld'
 
 require 'grpc'
-require 'helloworld_pb'
+require_relative './helloworld_pb'
 
 module Helloworld
   module Greeter

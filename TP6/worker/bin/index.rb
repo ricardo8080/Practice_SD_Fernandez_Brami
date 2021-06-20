@@ -4,19 +4,19 @@ $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
 require 'grpc'
 require 'multi_json'
-require 'route_guide_services_pb'
+require 'helloworld_services_pb'
 require 'mqtt'
 require 'uri'
 require 'socket'
 
-include Routeguide
+include HelloWorld
 
 iter_freq = ''
 
 id = Socket.gethostname
 ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
 
-stub = RouteGuide::Stub.new('master:9090')
+stub = Helloworld::Stub.new('master:9090')
 
 # ServerImpl provides an implementation of the RouteGuide service.
 class ServerImpl < HelloWorld::Greeter::Service

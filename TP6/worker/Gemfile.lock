@@ -25,6 +25,7 @@ GEM
 PLATFORMS
   ruby
   x86_64-linux
+  x64-mingw32
 
 DEPENDENCIES
   bundler (>= 1.9)

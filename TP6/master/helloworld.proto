@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package helloworld;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc Register (Request) returns (Response) {}
+  rpc SendTask (SendTask) returns (Empty) {}
+}
+
+// The request message containing the user's name.
+message Request {
+  string message = 1;
+}
+
+message Response {
+    string message = 1;
+}
+
+message SendTask {
+  string message = 1;
+}
+
+message Empty {}

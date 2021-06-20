@@ -35,6 +35,7 @@ function sendTask(call, callback) {
   client_mqtt.publish(TOPICSENSORIDRESPONSE, iter_freq);
 }
 
+
 client_mqtt.on('connect', function () {
   sleep(8000);
   //Send worker_id to master

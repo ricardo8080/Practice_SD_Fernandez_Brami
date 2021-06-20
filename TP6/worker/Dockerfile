@@ -12,4 +12,4 @@ COPY . .
 
 #CMD ["grpc_tools_ruby_protoc -I ./ --ruby_out=./bin --grpc_out=./bin ./helloworld.proto"]
 
-CMD ["./bin/index.rb"]
+ENTRYPOINT ["ruby", "./index.rb"]

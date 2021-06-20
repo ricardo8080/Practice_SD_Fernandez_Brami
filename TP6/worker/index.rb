@@ -19,7 +19,7 @@ ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_addr
 stub = RouteGuide::Stub.new('master:9090')
 
 # ServerImpl provides an implementation of the RouteGuide service.
-class ServerImpl < RouteGuide::Service
+class ServerImpl < HelloWorld::Service
   def send_task(point, _call)
     puts point
     puts _call

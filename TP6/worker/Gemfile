@@ -7,7 +7,5 @@ gemspec
 
 gem 'grpc'
 gem 'multi_json'
-gem 'route_guide_services_pb'
 gem 'mqtt'
 gem 'uri'
-gem 'socket'

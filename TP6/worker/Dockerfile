@@ -10,6 +10,6 @@ RUN bundle install
 
 COPY . .
 
-#CMD ["grpc_tools_ruby_protoc -I ./ --ruby_out=./lib --grpc_out=./lib ./helloworld.proto"]
+#CMD ["grpc_tools_ruby_protoc -I ./ --ruby_out=./bin --grpc_out=./bin ./helloworld.proto"]
 
-CMD ["./index.rb"]
+CMD ["./bin/index.rb"]

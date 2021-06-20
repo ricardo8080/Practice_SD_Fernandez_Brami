@@ -17,7 +17,7 @@ id = Socket.gethostname
 ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
 
 stub = Helloworld::Greeter::Stub.new('master:9090', :this_channel_is_insecure)
-iter_freq = stub.register(Helloworld::Request.new(message: id)).message
+iter_freq = stub.register(Helloworld::Request.new(message: '{"worker_id": ' + id + '}')).message
 
 # ServerImpl provides an implementation of the RouteGuide service.
 class ServerImpl < Helloworld::Greeter::Service

@@ -40,6 +40,7 @@ const server = http.createServer(requestListener);
 server.listen(8080);
 
 async function getAndSaveWorkerToRegister(message){
+    console.log(message)
     if (!(message === null ||  message === undefined)) {
         const newItem = new Item({
             worker_id: (JSON.parse(message)).worker_id
@@ -84,7 +85,9 @@ async function makeSendTask(message) {
 }
 
 async function register(call, callback) {
-    await getAndSaveWorkerToRegister(call);
+    console.log(call)
+    console.log(call.message)
+    await getAndSaveWorkerToRegister(call.message);
     const freq = parseFloat((Math.random() + 0.50).toFixed(2));
     const data = {
         freq: freq,

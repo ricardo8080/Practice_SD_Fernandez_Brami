@@ -67,5 +67,5 @@ client_grpc.register({message: getId()}, function(err, response) {
 var server_grpc = new grpc.Server();
 server_grpc.addService(hello_proto.Greeter.service, {sendTask: sendTask});
 server_grpc.bindAsync(id + ':9090', grpc.ServerCredentials.createInsecure(), () => {
-  server_mqtt.start();
+  server_grpc.start();
 });

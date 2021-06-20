@@ -31,8 +31,10 @@ function getId() {
 };
 
 function sendTask(call, callback) {
-  callback(null, {sensor_id: 'sensor_id'});
+  console.log(call.request.message);
+  TOPICSENSORIDRESPONSE='upb/'+JSON.parse(call.request.message).sensor_id+'/response'
   client_mqtt.publish(TOPICSENSORIDRESPONSE, iter_freq);
+  callback(null, {sensor_id: 'sensor_id'});
 }
 
 client_mqtt.on('connect', function () {
@@ -40,14 +42,6 @@ client_mqtt.on('connect', function () {
   //Send worker_id to master
   console.log('Connected to broker mqtt')
 });
-
-client_mqtt.on('message', async function (topic, message) {
-  // message is Buffer
-  TOPICSENSORIDRESPONSE='upb/'+JSON.parse(message).sensor_id+'/response'
-  if(topic == TOPICWORKERREQUEST) {
-    client_mqtt.publish(TOPICSENSORIDRESPONSE, iter_freq);
-  }
-})
 
 var argv = parseArgs(process.argv.slice(2), {
   string: 'target'

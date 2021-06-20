@@ -1,19 +1,13 @@
-FROM node:latest
+FROM ruby:latest
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
 
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 
-RUN npm install
-CMD ["./startWorker.sh"]
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY . .
 
-EXPOSE 1883
-ENTRYPOINT [ "node", "index.js" ]
+CMD ["./index.rb"]

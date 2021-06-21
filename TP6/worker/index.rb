@@ -14,7 +14,6 @@ include Helloworld
 iter_freq = ''
 
 id = Socket.gethostname
-ip = Socket.ip_address_list.find { |ai| ai.ipv4? && !ai.ipv4_loopback? }.ip_address
 
 stub = Helloworld::Greeter::Stub.new('master:9090', :this_channel_is_insecure)
 iter_freq = stub.register(Helloworld::Request.new(message: '{"worker_id": "' + id + '"}')).message
@@ -24,14 +23,12 @@ class ServerImpl < Helloworld::Greeter::Service
   def send_task(point, _call)
     puts point
     puts _call
-    #name = @feature_db[{
-    #  'longitude' => point.longitude,
-    #  'latitude' => point.latitude }] || ''
-    #Feature.new(location: point, name: name)
-
+    json_m = JSON.parse(iter_freq)
+    json_m["data"].push("worker_id" => id)
+    puts JSON.generate(json_m)
     #MQTT::Client.connect('research.upb.edu:11132') do |c|
     MQTT::Client.connect('research.upb.edu:11182') do |c|
-      c.publish('upb/' + point.request.message + '/response', iter_freq)
+      c.publish('upb/' + point.request.message + '/response', JSON.generate(json_m))
     end
   end
 end

@@ -68,18 +68,13 @@ async function makeSendTask(message) {
     console.log("Workers");
     console.log(Workers);
     if (!(Workers === null || Workers === undefined)) {
-        var argv = parseArgs(process.argv.slice(2), {
-            string: 'target'
-        });
-        var target;
-        if (argv.target) {
-            target = argv.target;
-        } else {
-            target = Workers.worker_id + '9090';
-        }
+        var target = Workers.worker_id + ':9090';
+	console.log(target)
+	console.log(destination)
         var client_grpc = new hello_proto.Greeter(target, grpc.credentials.createInsecure());
         client_grpc.sendTask({message: destination}, function(err, response) {
-            console.log('Message sent');
+            console.log("alooo")
+	    console.log('Message sent: ' + response);
         });
     }
 }
@@ -90,7 +85,7 @@ async function register(call, callback) {
     const freq = parseFloat((Math.random() + 0.50).toFixed(2));
     const data = {
         freq: freq,
-        iteration: (Math.floor(Math.random() * 15) + 5) 
+        iteration: (Math.floor(Math.random() * 15) + 5)
     }
     callback(null, {message: JSON.stringify(data)});
 }

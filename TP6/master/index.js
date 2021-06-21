@@ -85,7 +85,6 @@ async function makeSendTask(message) {
 }
 
 async function register(call, callback) {
-    console.log(call)
     console.log(call.request.message)
     await getAndSaveWorkerToRegister(call.request.message);
     const freq = parseFloat((Math.random() + 0.50).toFixed(2));

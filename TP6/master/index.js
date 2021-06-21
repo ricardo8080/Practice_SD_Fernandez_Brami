@@ -73,7 +73,7 @@ async function makeSendTask(message) {
 	console.log(destination)
         var client_grpc = new hello_proto.Greeter(target, grpc.credentials.createInsecure());
         client_grpc.sendTask({message: destination}, function(err, response) {
-            console.log("alooo")
+            console.log('alooo: ' + err)
 	    console.log('Message sent: ' + response);
         });
     }

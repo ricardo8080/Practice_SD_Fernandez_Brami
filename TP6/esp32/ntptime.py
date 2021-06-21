@@ -11,7 +11,7 @@ except:
 NTP_DELTA = 3155673600
 
 # The NTP host can be configured at runtime by doing: ntptime.host = 'myhost.org'
-host = "bo.pool.ntp.org"
+host = "pool.ntp.org"
 
 
 def time():

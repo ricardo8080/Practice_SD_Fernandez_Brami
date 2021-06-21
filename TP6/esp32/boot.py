@@ -48,8 +48,15 @@ while station.isconnected() == False:
 print('Connection successful')
 #print(station.ifconfig())
 print('la ip es: ', station.ifconfig()[0])
+def restart_and_reconnect_time():
+  print('Failed to connect to ntptime. Reconnecting...')
+  time.sleep(2)
+  machine.reset()
 
-settime()
+try:
+  settime()
+except OSError as e:
+  restart_and_reconnect_time()
 
 ip = station.ifconfig()[0]
 sub_ips = ip.split('.')
@@ -58,6 +65,7 @@ timestamp=str((946684800 + time.time()))
 sensorid = sub_ips[len(sub_ips) - 2] + '.' + sub_ips[len(sub_ips) - 1] + '.' +  timestamp[-5:]
 print(sensorid + ' :SENSORID')
 
+
 message_interval = 5
 last_recieved = 0
 
@@ -65,6 +73,10 @@ workerid = b''
 master_request = {
   "sensor_id": sensorid,
   "worker": workerid
+}
+
+worker_request = {
+  "sensor_id": sensorid
 }
 
 SERVER='research.upb.edu'

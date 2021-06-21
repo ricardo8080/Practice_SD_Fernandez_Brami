@@ -10,10 +10,11 @@ Gem::Specification.new do |s|
     s.executables   = `git ls-files -- ./*.rb`.split("\n").map do |f|
         File.basename(f)
     end
-    s.require_paths = ['lib']
+    s.require_paths = ['bin']
     s.platform      = Gem::Platform::RUBY
   
     s.add_dependency 'grpc', '~> 1.0'
     s.add_dependency 'multi_json', '~> 1.13.1'
+    s.add_dependency 'logger', '~> 1.4.2'
     s.add_development_dependency 'bundler', '>= 1.9'
   end

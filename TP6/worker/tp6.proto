@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package routeguide;
+
+service RouteGuide {
+  rpc RecordWorkerId(RegisterRequest) returns (RegisterResponse) {}
+  rpc SendTask(SendTask) returns (Empty) {}
+}
+
+message RegisterRequest {
+	string worker_id = 1;
+}
+
+message RegisterResponse {
+  int32 iteration = 1;
+  double freq = 2;
+}
+
+message SendTask {
+  string sensor_id = 1;
+}
+
+message Empty {}

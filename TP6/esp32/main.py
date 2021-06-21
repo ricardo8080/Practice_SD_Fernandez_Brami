@@ -22,7 +22,6 @@ try:
 except OSError as e:
   restart_and_reconnect()
 
-
 last_sent = time.time()
 print(ujson.dumps(master_request))
 print('start')

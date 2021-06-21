@@ -18,10 +18,10 @@ import ujson
 
 from ntptime import settime
 
-#ssid = '5G Tigo COVID-19'
-#password = 'As96HBUn'
-ssid = 'EnGenius7F67B2'
-password = '*RF250570notta'
+ssid = '5G Tigo COVID-19'
+password = 'As96HBUn'
+#ssid = 'EnGenius7F67B2'
+#password = '*RF250570notta'
 
 client_id = ubinascii.hexlify(machine.unique_id())
 
@@ -68,7 +68,7 @@ master_request = {
 }
 
 SERVER='research.upb.edu'
-PORT='11132'
+PORT='11182'
 TIMEOUT=5
 topicmasterrequest=b'upb/master/request'
 topicsensoridresponse=b'upb/' + sensorid + b'/response'

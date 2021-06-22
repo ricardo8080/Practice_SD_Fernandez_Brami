@@ -75,10 +75,6 @@ master_request = {
   "worker": workerid
 }
 
-worker_request = {
-  "sensor_id": sensorid
-}
-
 SERVER='research.upb.edu'
 PORT='11182'
 TIMEOUT=5

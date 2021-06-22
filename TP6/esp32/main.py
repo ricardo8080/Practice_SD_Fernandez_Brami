@@ -42,6 +42,7 @@ while True:
       workerid = worker_json["worker_id"]
       #if there was response with workerid then contact with worker
       if workerid != '':
+        master_request["worker"] = workerid
         freq = worker_json["freq"]
         iteration = worker_json["iteration"]
         oled.fill(0)
